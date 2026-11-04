@@ -1,0 +1,73 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./reading.db"
+}
+
+model Reader {
+  id           String       @id @default(cuid())
+  email        String       @unique
+  name         String
+  passwordHash String
+  role         String
+  createdAt    DateTime     @default(now())
+  downloads    Download[]
+  bookmarks    Bookmark[]
+  shelf        ShelfEntry[]
+}
+
+model Title {
+  id          String       @id @default(cuid())
+  slug        String       @unique
+  work        String
+  writer      String
+  category    String
+  year        Int
+  note        String
+  gutenbergId Int?
+  workKey     String
+  writerKey   String
+  categoryKey String
+  createdAt   DateTime     @default(now())
+  downloads   Download[]
+  bookmarks   Bookmark[]
+  shelf       ShelfEntry[]
+}
+
+model Download {
+  id        String   @id @default(cuid())
+  titleId   String
+  readerId  String?
+  guestIp   String?
+  createdAt DateTime @default(now())
+  title     Title    @relation(fields: [titleId], references: [id], onDelete: Cascade)
+  reader    Reader?  @relation(fields: [readerId], references: [id], onDelete: Cascade)
+
+  @@index([readerId, titleId])
+  @@index([guestIp, titleId])
+}
+
+model Bookmark {
+  id        String   @id @default(cuid())
+  readerId  String
+  titleId   String
+  createdAt DateTime @default(now())
+  reader    Reader   @relation(fields: [readerId], references: [id], onDelete: Cascade)
+  title     Title    @relation(fields: [titleId], references: [id], onDelete: Cascade)
+
+  @@unique([readerId, titleId])
+}
+
+model ShelfEntry {
+  id        String   @id @default(cuid())
+  readerId  String
+  titleId   String
+  createdAt DateTime @default(now())
+  reader    Reader   @relation(fields: [readerId], references: [id], onDelete: Cascade)
+  title     Title    @relation(fields: [titleId], references: [id], onDelete: Cascade)
+
+  @@unique([readerId, titleId])
+}

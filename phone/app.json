@@ -1,0 +1,13 @@
+{
+  "expo": {
+    "name": "The Reading Room",
+    "slug": "reading-room",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "light",
+    "android": {
+      "package": "local.readingroom.phone",
+      "usesCleartextTraffic": true
+    }
+  }
+}

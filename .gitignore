@@ -1,0 +1,8 @@
+node_modules
+dist
+.expo
+*.log
+server/prisma/*.db
+server/prisma/*.db-journal
+client/dist
+phone/dist
